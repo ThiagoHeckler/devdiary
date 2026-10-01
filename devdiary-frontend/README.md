@@ -1,21 +1,16 @@
 # DevDiary Frontend
-Aplicação React + Vite para o blog DevDiary.
 
-## Stack
-- React 18
-- TypeScript
-- Vite
-- Axios
-- React Router
+Site do DevDiary (vitrine, serviços, projetos e blog), feito com Next.js (App Router), TypeScript e Tailwind CSS.
 
-## Desenvolvimento
+## Rodando localmente
+
 ```bash
-pnpm install
-pnpm run dev
+npm install
+npm run dev
 ```
 
-## Build
-```bash
-pnpm run build
-```
+Acesse http://localhost:3000.
 
+## Variáveis de ambiente
+
+- `NEXT_PUBLIC_API_URL`: URL da API (NestJS), ex.: `http://localhost:3000/api`
