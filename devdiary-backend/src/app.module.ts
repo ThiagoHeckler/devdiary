@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LeadsModule } from './leads/leads.module';
 import { PostsModule } from './posts/posts.module';
 
 @Module({
@@ -33,6 +34,7 @@ import { PostsModule } from './posts/posts.module';
       },
     ]),
     PostsModule,
+    LeadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
