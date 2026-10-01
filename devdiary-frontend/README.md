@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Acesse http://localhost:3000.
+Acesse http://localhost:3001 (a API NestJS usa a porta 3000).
 
 ## Variáveis de ambiente
 
