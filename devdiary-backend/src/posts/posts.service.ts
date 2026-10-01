@@ -1,26 +1,74 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ArrayContains, LessThanOrEqual, Repository } from 'typeorm';
+import { ListPostsQueryDto } from './dto/list-posts-query.dto';
+import { Post, PostStatus } from './entities/post.entity';
+
+export type PostSummary = Omit<Post, 'content' | 'status' | 'createdAt'>;
+
+export interface Paginated<T> {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  constructor(
+    @InjectRepository(Post)
+    private readonly postsRepository: Repository<Post>,
+  ) {}
+
+  private publishedWhere() {
+    return {
+      status: PostStatus.PUBLISHED,
+      publishedAt: LessThanOrEqual(new Date()),
+    };
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findPublished({
+    page,
+    limit,
+    tag,
+  }: ListPostsQueryDto): Promise<Paginated<PostSummary>> {
+    const [items, total] = await this.postsRepository.findAndCount({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        coverImageUrl: true,
+        tags: true,
+        publishedAt: true,
+        updatedAt: true,
+      },
+      where: {
+        ...this.publishedWhere(),
+        ...(tag && { tags: ArrayContains([tag]) }),
+      },
+      order: { publishedAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
-  }
-
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async findPublishedBySlug(slug: string): Promise<Post> {
+    const post = await this.postsRepository.findOne({
+      where: { ...this.publishedWhere(), slug },
+    });
+    if (!post) {
+      throw new NotFoundException('Post não encontrado');
+    }
+    return post;
   }
 }

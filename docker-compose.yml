@@ -1,0 +1,22 @@
+# Banco de dados para desenvolvimento local.
+# Uso: docker compose up -d
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devdiary
+      POSTGRES_PASSWORD: devdiary
+      POSTGRES_DB: devdiary
+    ports:
+      - "127.0.0.1:15435:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devdiary -d devdiary"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db-data:
