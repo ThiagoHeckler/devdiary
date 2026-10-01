@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: #fafaf9;
@@ -43,4 +44,48 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Destaque de sintaxe dos blocos de código (classes geradas pelo rehype-highlight).
+   Os blocos têm fundo escuro nos dois temas. */
+.prose pre {
+  background: #1c1917;
+  border: 1px solid #292524;
+}
+.hljs-comment,
+.hljs-quote {
+  color: #a8a29e;
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in,
+.hljs-meta {
+  color: #f472b6;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition {
+  color: #a3e635;
+}
+.hljs-number,
+.hljs-literal,
+.hljs-symbol {
+  color: #fb923c;
+}
+.hljs-title,
+.hljs-title.function_,
+.hljs-section {
+  color: #2dd4bf;
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-property,
+.hljs-type,
+.hljs-params {
+  color: #93c5fd;
+}
+.hljs-deletion {
+  color: #f87171;
 }
