@@ -16,9 +16,11 @@ async function bootstrap() {
   // Segurança
   app.use(helmet());
 
-  // CORS
+  // CORS (FRONTEND_URL aceita várias origens separadas por vírgula)
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+    origin: (process.env.FRONTEND_URL || 'http://localhost:3001')
+      .split(',')
+      .map((url) => url.trim()),
     credentials: true,
   });
 
