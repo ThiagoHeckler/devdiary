@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
 import { Container } from "@/components/container";
+import { projectTypes } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -9,7 +10,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contato" },
 };
 
-export default function ContactPage() {
+export default async function ContactPage({ searchParams }: PageProps<"/contato">) {
+  // /contato?tipo=site, vindo da página de serviços, já deixa o tipo escolhido.
+  const { tipo } = await searchParams;
+  const defaultProjectType = projectTypes.some((type) => type.value === tipo)
+    ? (tipo as string)
+    : undefined;
+
   return (
     <Container className="py-16 sm:py-20">
       <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
@@ -27,7 +34,7 @@ export default function ContactPage() {
             <li>✓ Orçamento e prazo ajudam, mas são opcionais</li>
           </ul>
         </header>
-        <ContactForm />
+        <ContactForm defaultProjectType={defaultProjectType} />
       </div>
     </Container>
   );

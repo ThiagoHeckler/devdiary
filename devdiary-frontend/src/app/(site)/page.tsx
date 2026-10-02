@@ -1,28 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
-
-const services = [
-  {
-    title: "Sites sob medida",
-    description:
-      "Sites institucionais e landing pages rápidos, bem posicionados no Google e fáceis de atualizar.",
-  },
-  {
-    title: "Sistemas web",
-    description:
-      "Painéis, áreas de cliente e ferramentas internas feitas para o fluxo real do seu negócio.",
-  },
-  {
-    title: "Automações",
-    description:
-      "Integrações entre sistemas e rotinas automáticas que eliminam trabalho manual repetitivo.",
-  },
-  {
-    title: "Soluções com IA",
-    description:
-      "Assistentes, classificação de documentos e atendimento com IA aplicados onde trazem resultado.",
-  },
-];
+import { services } from "@/lib/services";
 
 const steps = [
   {
@@ -82,10 +60,14 @@ export default function Home() {
           <ul className="mt-10 grid gap-4 sm:grid-cols-2">
             {services.map((service) => (
               <li
-                key={service.title}
+                key={service.id}
                 className="rounded-2xl border border-border bg-surface p-6"
               >
-                <h3 className="font-semibold">{service.title}</h3>
+                <h3 className="font-semibold">
+                  <Link href={`/servicos#${service.id}`} className="hover:text-accent">
+                    {service.title}
+                  </Link>
+                </h3>
                 <p className="mt-2 text-muted">{service.description}</p>
               </li>
             ))}
