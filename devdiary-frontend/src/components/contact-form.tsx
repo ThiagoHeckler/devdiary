@@ -15,7 +15,7 @@ const inputClass =
   "mt-2 w-full rounded-lg border border-border bg-surface px-4 py-2.5 outline-none transition-colors focus:border-accent focus:ring-2 focus:ring-accent/30";
 const labelClass = "block text-sm font-medium";
 
-export function ContactForm() {
+export function ContactForm({ defaultProjectType = "" }: { defaultProjectType?: string }) {
   const [status, setStatus] = useState<Status>({ state: "idle" });
 
   // Usa onSubmit em vez de <form action>: o React limpa o formulário depois
@@ -95,7 +95,13 @@ export function ContactForm() {
           <label htmlFor="projectType" className={labelClass}>
             Tipo de projeto *
           </label>
-          <select id="projectType" name="projectType" required defaultValue="" className={inputClass}>
+          <select
+            id="projectType"
+            name="projectType"
+            required
+            defaultValue={defaultProjectType}
+            className={inputClass}
+          >
             <option value="" disabled>
               Selecione
             </option>

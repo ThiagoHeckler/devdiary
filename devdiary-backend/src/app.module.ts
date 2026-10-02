@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { LeadsModule } from './leads/leads.module';
 import { PostsModule } from './posts/posts.module';
 
@@ -33,6 +34,7 @@ import { PostsModule } from './posts/posts.module';
         limit: 10,
       },
     ]),
+    AuthModule,
     PostsModule,
     LeadsModule,
   ],
