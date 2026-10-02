@@ -53,12 +53,27 @@ O `.env` local do backend já tem um admin de teste: `admin@devdiary.local`. A s
 
 Todas as rotas `/api/admin/*` exigem o token.
 
+## Passo 5: serviços, projetos e sobre ✅
+
+Os links do menu agora abrem páginas de verdade:
+
+- **`/servicos`**: os 4 serviços, cada um com "para quem", "o que inclui", exemplos e um botão de orçamento.
+  - O botão abre `/contato?tipo=site` (ou `sistema`, `automacao`, `ia`) e o formulário já vem com o tipo de projeto escolhido.
+  - Os textos ficam em `devdiary-frontend/src/lib/services.ts`. A home usa a mesma lista, então editar ali muda os dois lugares.
+- **`/projetos`**: cada projeto mostra problema, solução, resultado, tecnologias e links opcionais (site, código e post no blog).
+  - Os dados ficam em `devdiary-frontend/src/lib/projects.ts`. Por enquanto só tem o próprio DevDiary. Para adicionar outro, copie o item e preencha.
+- **`/sobre`**: apresentação, "como trabalho", tecnologias, link para o GitHub e dados estruturados de pessoa para o Google.
+- As três páginas entraram no `sitemap.xml`.
+
+⚠️ **Revise os textos.** Os textos dos serviços e da página Sobre são um rascunho meu. A lista de tecnologias do Sobre também é um palpite: confira se é isso que você quer oferecer.
+
 ## Próximo passo
 
-5. Páginas de serviços, projetos e sobre. Os links do menu ainda abrem a página 404.
+6. Deploy na VPS e primeiro post publicado.
 
-Os itens da sessão anterior continuam pendentes para você revisar:
+Itens para você revisar:
 
-- textos da home;
+- textos da home, dos serviços e do sobre;
+- adicionar seus projetos em `src/lib/projects.ts`;
 - prazo de resposta no `/contato`;
 - domínio de produção (`NEXT_PUBLIC_SITE_URL`).
