@@ -1,10 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Paginated, paginate } from '../common/pagination';
 import { MailService } from '../mail/mail.service';
+import { AdminListLeadsQueryDto } from './dto/admin-list-leads-query.dto';
 import { CreateLeadDto } from './dto/create-lead.dto';
-import { Budget, Deadline, Lead, ProjectType } from './entities/lead.entity';
+import {
+  Budget,
+  Deadline,
+  Lead,
+  LeadStatus,
+  ProjectType,
+} from './entities/lead.entity';
 
 const projectTypeLabels: Record<ProjectType, string> = {
   [ProjectType.SITE]: 'Site',
@@ -65,6 +73,29 @@ export class LeadsService {
         error instanceof Error ? error.stack : String(error),
       );
     }
+  }
+
+  async findAll({
+    page,
+    limit,
+    status,
+  }: AdminListLeadsQueryDto): Promise<Paginated<Lead>> {
+    const [items, total] = await this.leadsRepository.findAndCount({
+      where: status ? { status } : {},
+      order: { createdAt: 'DESC' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return paginate(items, total, page, limit);
+  }
+
+  async updateStatus(id: string, status: LeadStatus): Promise<Lead> {
+    const lead = await this.leadsRepository.findOneBy({ id });
+    if (!lead) {
+      throw new NotFoundException('Contato não encontrado');
+    }
+    lead.status = status;
+    return this.leadsRepository.save(lead);
   }
 
   private async notify(lead: Lead) {

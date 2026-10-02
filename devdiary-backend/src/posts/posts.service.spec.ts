@@ -1,7 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ArrayContains } from 'typeorm';
+import { ArrayContains, QueryFailedError } from 'typeorm';
 import { Post, PostStatus } from './entities/post.entity';
 import { PostsService } from './posts.service';
 
@@ -10,10 +10,17 @@ describe('PostsService', () => {
   const repository = {
     findAndCount: jest.fn(),
     findOne: jest.fn(),
+    findOneBy: jest.fn(),
+    create: jest.fn(),
+    save: jest.fn(),
   };
 
   beforeEach(async () => {
     jest.resetAllMocks();
+    repository.create.mockImplementation((data: Partial<Post>) => ({
+      ...data,
+    }));
+    repository.save.mockImplementation((post: Post) => Promise.resolve(post));
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PostsService,
@@ -84,6 +91,81 @@ describe('PostsService', () => {
       repository.findOne.mockResolvedValue(null);
 
       await expect(service.findPublishedBySlug('nao-existe')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('create', () => {
+    const dto = {
+      title: 'Olá, Mundo!',
+      excerpt: 'Um resumo do post.',
+      content: '# Conteúdo',
+    };
+
+    it('creates a draft with a slug generated from the title', async () => {
+      const post = await service.create(dto);
+
+      expect(post).toMatchObject({
+        slug: 'ola-mundo',
+        status: PostStatus.DRAFT,
+        publishedAt: null,
+        tags: [],
+        coverImageUrl: null,
+      });
+    });
+
+    it('sets publishedAt when publishing without a date', async () => {
+      const post = await service.create({
+        ...dto,
+        status: PostStatus.PUBLISHED,
+      });
+
+      expect(post.publishedAt).toBeInstanceOf(Date);
+    });
+
+    it('keeps the given publishedAt', async () => {
+      const publishedAt = new Date('2026-12-01T12:00:00Z');
+      const post = await service.create({
+        ...dto,
+        status: PostStatus.PUBLISHED,
+        publishedAt,
+      });
+
+      expect(post.publishedAt).toBe(publishedAt);
+    });
+
+    it('throws ConflictException when the slug already exists', async () => {
+      const error = new QueryFailedError('INSERT', [], new Error('duplicate'));
+      Object.assign(error.driverError, { code: '23505' });
+      repository.save.mockRejectedValue(error);
+
+      await expect(service.create(dto)).rejects.toThrow(ConflictException);
+    });
+  });
+
+  describe('update', () => {
+    it('regenerates the slug when it is cleared', async () => {
+      repository.findOneBy.mockResolvedValue({
+        id: '1',
+        title: 'Título antigo',
+        slug: 'titulo-antigo',
+        status: PostStatus.DRAFT,
+        publishedAt: null,
+      });
+
+      const post = await service.update('1', {
+        title: 'Título novo',
+        slug: null,
+      });
+
+      expect(post.slug).toBe('titulo-novo');
+    });
+
+    it('throws NotFoundException for an unknown id', async () => {
+      repository.findOneBy.mockResolvedValue(null);
+
+      await expect(service.update('1', { title: 'X' })).rejects.toThrow(
         NotFoundException,
       );
     });
