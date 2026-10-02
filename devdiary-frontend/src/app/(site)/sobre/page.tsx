@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { CtaSection } from "@/components/cta-section";
+import { PageHeader } from "@/components/page-header";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -58,43 +60,43 @@ export default function AboutPage() {
         }}
       />
 
-      <Container className="py-16 sm:py-20">
-        <header className="max-w-2xl">
-          <p className="font-mono text-sm text-accent">Sobre</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Oi, eu sou o {siteConfig.author.split(" ")[0]}
-          </h1>
-          <div className="mt-6 space-y-4 text-lg text-muted">
-            <p>
-              Sou desenvolvedor de software e crio sites, sistemas web e
-              automações para empresas e profissionais que querem usar
-              tecnologia para trabalhar melhor, não só para ter algo novo.
-            </p>
-            <p>
-              O {siteConfig.name} nasceu como meu diário de estudos e virou o
-              lugar onde apresento meu trabalho. No blog, conto os bastidores
-              dos projetos: o que funcionou, o que não funcionou e o que aprendi
-              no caminho.
-            </p>
-          </div>
-        </header>
+      <PageHeader eyebrow="Sobre" title={`Oi, eu sou o ${siteConfig.author.split(" ")[0]}`}>
+        <p>
+          Sou desenvolvedor de software e crio sites, sistemas web e automações
+          para empresas e profissionais que querem usar tecnologia para
+          trabalhar melhor, não só para ter algo novo.
+        </p>
+        <p>
+          O {siteConfig.name} nasceu como meu diário de estudos e virou o lugar
+          onde apresento meu trabalho. No blog, conto os bastidores dos
+          projetos: o que funcionou, o que não funcionou e o que aprendi no
+          caminho.
+        </p>
+      </PageHeader>
 
-        <section aria-labelledby="principios-titulo" className="mt-16">
-          <h2 id="principios-titulo" className="text-2xl font-semibold tracking-tight">
+      <Container className="py-16 sm:py-20">
+        <section aria-labelledby="principios-titulo">
+          <h2 id="principios-titulo" className="text-3xl font-semibold tracking-tight sm:text-4xl">
             Como trabalho
           </h2>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-            {principles.map((principle) => (
-              <li key={principle.title} className="rounded-2xl border border-border bg-surface p-6">
-                <h3 className="font-semibold">{principle.title}</h3>
+            {principles.map((principle, index) => (
+              <li
+                key={principle.title}
+                className="rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent/50 sm:p-8"
+              >
+                <span className="font-mono text-sm text-accent">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-3 text-lg font-semibold">{principle.title}</h3>
                 <p className="mt-2 text-muted">{principle.description}</p>
               </li>
             ))}
           </ul>
         </section>
 
-        <section aria-labelledby="tecnologias-titulo" className="mt-16">
-          <h2 id="tecnologias-titulo" className="text-2xl font-semibold tracking-tight">
+        <section aria-labelledby="tecnologias-titulo" className="mt-20">
+          <h2 id="tecnologias-titulo" className="text-3xl font-semibold tracking-tight sm:text-4xl">
             Tecnologias que uso
           </h2>
           <dl className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -102,9 +104,14 @@ export default function AboutPage() {
               <div key={group.area}>
                 <dt className="font-mono text-sm text-accent">{group.area}</dt>
                 <dd className="mt-3">
-                  <ul className="space-y-1">
+                  <ul className="flex flex-wrap gap-2">
                     {group.items.map((item) => (
-                      <li key={item}>{item}</li>
+                      <li
+                        key={item}
+                        className="rounded-full border border-border bg-surface px-3 py-1 text-sm"
+                      >
+                        {item}
+                      </li>
                     ))}
                   </ul>
                 </dd>
@@ -113,7 +120,7 @@ export default function AboutPage() {
           </dl>
         </section>
 
-        <p className="mt-16 text-muted">
+        <p className="mt-20 text-muted">
           Veja também os{" "}
           <Link href="/projetos" className="font-medium text-accent hover:text-accent-hover">
             projetos
@@ -131,23 +138,7 @@ export default function AboutPage() {
         </p>
       </Container>
 
-      <section className="border-t border-border bg-surface">
-        <Container className="py-16 text-center">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Vamos trabalhar juntos?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted">
-            Conte o que você precisa. Respondo com os próximos passos e uma
-            estimativa inicial.
-          </p>
-          <Link
-            href="/contato"
-            className="mt-8 inline-block rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
-          >
-            Fale comigo
-          </Link>
-        </Container>
-      </section>
+      <CtaSection title="Vamos trabalhar juntos?" />
     </>
   );
 }

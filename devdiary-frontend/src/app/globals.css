@@ -46,6 +46,44 @@ body {
   color: var(--foreground);
 }
 
+/* Quadriculado sutil que some nas bordas, usado atrás dos títulos de página. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Brilho suave na cor de destaque. */
+@utility bg-glow {
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 0%,
+    color-mix(in oklab, var(--accent) 22%, transparent),
+    transparent 70%
+  );
+}
+
+/* Entrada suave dos blocos do topo. Use com delay-* para escalonar. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@utility animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
+}
+
 /* Destaque de sintaxe dos blocos de código (classes geradas pelo rehype-highlight).
    Os blocos têm fundo escuro nos dois temas. */
 .prose pre {

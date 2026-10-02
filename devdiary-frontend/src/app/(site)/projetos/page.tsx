@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { CtaSection } from "@/components/cta-section";
+import { PageHeader } from "@/components/page-header";
 import { projects, type Project } from "@/lib/projects";
 
 export const metadata: Metadata = {
@@ -39,31 +41,29 @@ function ProjectLinks({ project }: { project: Project }) {
 export default function ProjectsPage() {
   return (
     <>
-      <Container className="py-16 sm:py-20">
-        <header className="max-w-2xl">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Projetos</h1>
-          <p className="mt-4 text-lg text-muted">
-            O problema de cada projeto, como resolvi e o que mudou depois.
-          </p>
-        </header>
+      <PageHeader eyebrow="Projetos" title="Trabalhos que resolveram problemas reais">
+        <p>O problema de cada projeto, como resolvi e o que mudou depois.</p>
+      </PageHeader>
 
-        <div className="mt-12 space-y-6">
+      <Container className="py-12 sm:py-16">
+        <div className="space-y-6">
           {projects.map((project) => (
             <article
               key={project.id}
               id={project.id}
               aria-labelledby={`${project.id}-titulo`}
-              className="scroll-mt-24 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+              className="scroll-mt-24 rounded-3xl border border-border bg-surface p-6 transition-colors hover:border-accent/50 sm:p-10"
             >
-              <p className="font-mono text-sm text-muted">
-                {project.category} · {project.year}
+              <p className="flex flex-wrap items-center gap-2 font-mono text-xs text-muted">
+                <span className="rounded-full border border-border px-3 py-1">{project.category}</span>
+                <span>{project.year}</span>
               </p>
-              <h2 id={`${project.id}-titulo`} className="mt-2 text-2xl font-semibold tracking-tight">
+              <h2 id={`${project.id}-titulo`} className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">
                 {project.title}
               </h2>
               <p className="mt-2 text-lg text-muted">{project.summary}</p>
 
-              <dl className="mt-8 grid gap-8 lg:grid-cols-3">
+              <dl className="mt-10 grid gap-8 border-t border-border pt-8 lg:grid-cols-3 lg:gap-10">
                 <div>
                   <dt className="font-mono text-sm text-accent">Problema</dt>
                   <dd className="mt-3">{project.problem}</dd>
@@ -100,23 +100,7 @@ export default function ProjectsPage() {
         </p>
       </Container>
 
-      <section className="border-t border-border bg-surface">
-        <Container className="py-16 text-center">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            O próximo projeto pode ser o seu
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted">
-            Conte o que você precisa. Respondo com os próximos passos e uma
-            estimativa inicial.
-          </p>
-          <Link
-            href="/contato"
-            className="mt-8 inline-block rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
-          >
-            Solicitar orçamento
-          </Link>
-        </Container>
-      </section>
+      <CtaSection title="O próximo projeto pode ser o seu" label="Solicitar orçamento" />
     </>
   );
 }
