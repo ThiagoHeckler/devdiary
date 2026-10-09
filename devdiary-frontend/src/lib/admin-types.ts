@@ -1,7 +1,6 @@
-// Tipos das respostas da API admin (devdiary-backend/src/posts e src/leads).
+// Tipos das respostas da API admin (devdiary-backend/src/posts).
 
 export type PostStatus = "draft" | "published";
-export type LeadStatus = "new" | "contacted" | "archived";
 
 export interface AdminPost {
   id: string;
@@ -19,28 +18,9 @@ export interface AdminPost {
 
 export type AdminPostSummary = Omit<AdminPost, "content">;
 
-export interface Lead {
-  id: string;
-  name: string;
-  email: string;
-  company: string | null;
-  projectType: string;
-  budget: string | null;
-  deadline: string | null;
-  message: string;
-  status: LeadStatus;
-  createdAt: string;
-}
-
 export const postStatusLabels: Record<PostStatus, string> = {
   draft: "Rascunho",
   published: "Publicado",
-};
-
-export const leadStatusLabels: Record<LeadStatus, string> = {
-  new: "Novo",
-  contacted: "Contatado",
-  archived: "Arquivado",
 };
 
 /**

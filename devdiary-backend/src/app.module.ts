@@ -5,7 +5,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { LeadsModule } from './leads/leads.module';
 import { PostsModule } from './posts/posts.module';
 
 @Module({
@@ -36,7 +35,6 @@ import { PostsModule } from './posts/posts.module';
     ]),
     AuthModule,
     PostsModule,
-    LeadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

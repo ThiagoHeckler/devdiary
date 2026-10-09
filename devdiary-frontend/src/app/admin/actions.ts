@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import {
@@ -10,7 +10,7 @@ import {
   readErrorMessage,
 } from "@/lib/admin-api";
 import { ADMIN_COOKIE, ADMIN_COOKIE_PATH } from "@/lib/admin-cookie";
-import type { AdminPost, LeadStatus } from "@/lib/admin-types";
+import type { AdminPost } from "@/lib/admin-types";
 
 export type FormState = { error?: string } | undefined;
 
@@ -117,13 +117,4 @@ export async function deletePost(formData: FormData) {
   await adminFetch(`/admin/posts/${text(formData, "id")}`, { method: "DELETE" });
   updateTag("posts");
   redirect("/admin/posts?apagado=1");
-}
-
-export async function updateLeadStatus(formData: FormData) {
-  const status = text(formData, "status") as LeadStatus;
-  await adminFetch(`/admin/leads/${text(formData, "id")}`, {
-    method: "PATCH",
-    body: JSON.stringify({ status }),
-  });
-  revalidatePath("/admin/contatos");
 }
