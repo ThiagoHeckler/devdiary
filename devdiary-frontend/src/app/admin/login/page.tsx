@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LoginForm } from "@/components/admin/login-form";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -10,7 +11,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
   const { expirou } = await searchParams;
 
   return (
-    <main className="flex flex-1 items-center justify-center px-4 py-16">
+    <main className="relative flex flex-1 items-center justify-center px-4 py-16">
+      <ThemeToggle className="absolute top-4 right-4" />
       <div className="w-full max-w-sm">
         <p className="text-center font-mono text-lg font-semibold">
           <span className="text-accent">&lt;</span>

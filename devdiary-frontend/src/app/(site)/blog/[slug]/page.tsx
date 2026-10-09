@@ -82,16 +82,16 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           <Markdown content={post.content} />
         </div>
         <aside className="mt-16 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-          <h2 className="text-lg font-semibold">Precisa de algo parecido no seu negócio?</h2>
+          <h2 className="text-lg font-semibold">Escrito por {siteConfig.author}</h2>
           <p className="mt-2 text-muted">
-            Conte o que você precisa e eu respondo com os próximos passos.
+            Projetos e contato estão no meu portfólio.
           </p>
-          <Link
-            href="/contato"
+          <a
+            href={siteConfig.portfolio}
             className="mt-6 inline-block rounded-full bg-accent px-5 py-2.5 font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
           >
-            Fale comigo
-          </Link>
+            Ver portfólio <span aria-hidden="true">↗</span>
+          </a>
         </aside>
       </article>
     </Container>

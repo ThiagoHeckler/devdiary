@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/container";
-import { CtaSection } from "@/components/cta-section";
 import { PageHeader } from "@/components/page-header";
 import { projects, type Project } from "@/lib/projects";
+import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Projetos",
   description:
-    "Projetos de sites, sistemas web, automações e IA: o problema de cada cliente, a solução e o resultado.",
+    "Projetos que acompanho no diário: o problema de cada um, como resolvi e o que mudou depois.",
   alternates: { canonical: "/projetos" },
 };
 
@@ -31,7 +31,7 @@ function ProjectLinks({ project }: { project: Project }) {
       )}
       {project.blogSlug && (
         <Link href={`/blog/${project.blogSlug}`} className={linkClass}>
-          Bastidores no blog →
+          Bastidores no blog
         </Link>
       )}
     </div>
@@ -41,8 +41,8 @@ function ProjectLinks({ project }: { project: Project }) {
 export default function ProjectsPage() {
   return (
     <>
-      <PageHeader eyebrow="Projetos" title="Trabalhos que resolveram problemas reais">
-        <p>O problema de cada projeto, como resolvi e o que mudou depois.</p>
+      <PageHeader eyebrow="Projetos" title="O que estou construindo">
+        <p>O problema de cada projeto, como resolvi e o que mudou depois. Os bastidores ficam no blog.</p>
       </PageHeader>
 
       <Container className="py-12 sm:py-16">
@@ -96,11 +96,14 @@ export default function ProjectsPage() {
           <Link href="/blog" className={linkClass}>
             blog
           </Link>
+          . Projetos Java no ar e trabalhos para clientes estão no{" "}
+          <a href={siteConfig.portfolio} className={linkClass}>
+            portfólio ↗
+          </a>
           .
         </p>
       </Container>
 
-      <CtaSection title="O próximo projeto pode ser o seu" label="Solicitar orçamento" />
     </>
   );
 }

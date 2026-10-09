@@ -1,42 +1,18 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SitesList } from "@/components/about-section";
 import { Container } from "@/components/container";
-import { CtaSection } from "@/components/cta-section";
 import { PageHeader } from "@/components/page-header";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Sobre",
-  description: `Quem está por trás do ${siteConfig.name}: ${siteConfig.author}, desenvolvedor de sites, sistemas web e automações com IA.`,
+  description: `Quem escreve o ${siteConfig.name}: ${siteConfig.author}, desenvolvedor backend Java.`,
   alternates: { canonical: "/sobre" },
 };
 
-const principles = [
-  {
-    title: "Problema antes da tecnologia",
-    description:
-      "Primeiro entendo o que precisa mudar no seu dia a dia. A ferramenta vem depois, e às vezes a resposta é mais simples do que parecia.",
-  },
-  {
-    title: "Entregas pequenas e frequentes",
-    description:
-      "Você vê o projeto funcionando desde as primeiras semanas e pode ajustar o rumo antes que fique caro.",
-  },
-  {
-    title: "Conversa direta",
-    description:
-      "Sem jargão desnecessário. Você sabe o que está sendo feito, quanto custa e por quê.",
-  },
-  {
-    title: "Código que dura",
-    description:
-      "Projetos documentados, com testes e fáceis de manter, mesmo que outra pessoa assuma depois.",
-  },
-];
-
 const stack = [
+  { area: "Backend", items: ["Java e Spring Boot", "Node.js", "NestJS", "PHP e Laravel"] },
   { area: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },
-  { area: "Backend", items: ["Node.js", "NestJS", "Java e Spring Boot", "PHP e Laravel"] },
   { area: "Dados", items: ["PostgreSQL", "MySQL", "MongoDB"] },
   { area: "Automação e IA", items: ["Python", "APIs de IA", "Integrações e rotinas agendadas"] },
 ];
@@ -46,9 +22,9 @@ export default function AboutPage() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.author,
-    url: new URL("/sobre", siteConfig.url).toString(),
-    sameAs: [siteConfig.github],
-    jobTitle: "Desenvolvedor de software",
+    url: siteConfig.portfolio,
+    sameAs: [siteConfig.github, "https://covalia.com.br"],
+    jobTitle: "Desenvolvedor backend Java",
   };
 
   return (
@@ -62,37 +38,25 @@ export default function AboutPage() {
 
       <PageHeader eyebrow="Sobre" title={`Oi, eu sou o ${siteConfig.author.split(" ")[0]}`}>
         <p>
-          Sou desenvolvedor de software e crio sites, sistemas web e automações
-          para empresas e profissionais que querem usar tecnologia para
-          trabalhar melhor, não só para ter algo novo.
+          Sou desenvolvedor backend Java. O {siteConfig.name} é o meu diário:
+          onde anoto o que estou estudando e construindo, com os erros, os
+          desvios e o que aprendi no caminho.
         </p>
         <p>
-          O {siteConfig.name} nasceu como meu diário de estudos e virou o lugar
-          onde apresento meu trabalho. No blog, conto os bastidores dos
-          projetos: o que funcionou, o que não funcionou e o que aprendi no
-          caminho.
+          Escrevo primeiro para mim, para lembrar depois. Se uma entrada ajudar
+          mais alguém, melhor ainda.
         </p>
       </PageHeader>
 
       <Container className="py-16 sm:py-20">
-        <section aria-labelledby="principios-titulo">
-          <h2 id="principios-titulo" className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Como trabalho
+        <section aria-labelledby="sites-titulo">
+          <h2 id="sites-titulo" className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            Meus sites
           </h2>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-            {principles.map((principle, index) => (
-              <li
-                key={principle.title}
-                className="rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-accent/50 sm:p-8"
-              >
-                <span className="font-mono text-sm text-accent">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-3 text-lg font-semibold">{principle.title}</h3>
-                <p className="mt-2 text-muted">{principle.description}</p>
-              </li>
-            ))}
-          </ul>
+          <p className="mt-3 text-muted">Trabalhos, serviços e contato ficam aqui.</p>
+          <div className="mt-8">
+            <SitesList />
+          </div>
         </section>
 
         <section aria-labelledby="tecnologias-titulo" className="mt-20">
@@ -121,24 +85,13 @@ export default function AboutPage() {
         </section>
 
         <p className="mt-20 text-muted">
-          Veja também os{" "}
-          <Link href="/projetos" className="font-medium text-accent hover:text-accent-hover">
-            projetos
-          </Link>{" "}
-          e o meu{" "}
-          <a
-            href={siteConfig.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-accent hover:text-accent-hover"
-          >
+          Código no{" "}
+          <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="link">
             GitHub ↗
           </a>
           .
         </p>
       </Container>
-
-      <CtaSection title="Vamos trabalhar juntos?" />
     </>
   );
 }

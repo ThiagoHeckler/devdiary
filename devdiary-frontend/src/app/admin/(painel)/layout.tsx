@@ -2,6 +2,7 @@ import Link from "next/link";
 import { logout } from "@/app/admin/actions";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { Container } from "@/components/container";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { siteConfig } from "@/lib/site";
 
 export default function PainelLayout({ children }: LayoutProps<"/admin">) {
@@ -21,6 +22,7 @@ export default function PainelLayout({ children }: LayoutProps<"/admin">) {
             <Link href="/" target="_blank" className="hidden text-muted hover:text-foreground sm:inline">
               Ver {siteConfig.name} ↗
             </Link>
+            <ThemeToggle />
             <form action={logout}>
               <button type="submit" className="text-muted hover:text-foreground">
                 Sair
