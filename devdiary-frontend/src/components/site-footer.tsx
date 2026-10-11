@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
-import { mainNav, siteConfig } from "@/lib/site";
+import { mainNav, mySites, siteConfig } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -15,9 +15,11 @@ export function SiteFooter() {
               {item.label}
             </Link>
           ))}
-          <Link href="/contato" className="hover:text-foreground">
-            Contato
-          </Link>
+          {mySites.map((site) => (
+            <a key={site.url} href={site.url} className="hover:text-foreground">
+              {site.domain}
+            </a>
+          ))}
           <a
             href={siteConfig.github}
             target="_blank"

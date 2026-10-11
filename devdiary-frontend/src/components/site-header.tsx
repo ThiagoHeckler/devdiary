@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Container } from "@/components/container";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { mainNav, siteConfig } from "@/lib/site";
 
 function isActive(pathname: string, href: string) {
@@ -38,30 +39,34 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/contato"
+          <ThemeToggle />
+          <a
+            href={siteConfig.portfolio}
             className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
           >
-            Fale comigo
-          </Link>
+            Portfólio <span aria-hidden="true">↗</span>
+          </a>
         </nav>
 
-        <button
-          type="button"
-          className="-mr-2 rounded-md p-2 text-muted hover:text-foreground md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          onClick={() => setOpen((value) => !value)}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            {open ? (
-              <path d="M6 6l12 12M18 6L6 18" />
-            ) : (
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            )}
-          </svg>
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="-mr-2 rounded-md p-2 text-muted hover:text-foreground md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setOpen((value) => !value)}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              {open ? (
+                <path d="M6 6l12 12M18 6L6 18" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </Container>
 
       {open && (
@@ -78,13 +83,12 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/contato"
+            <a
+              href={siteConfig.portfolio}
               className="mt-2 rounded-full bg-accent px-4 py-2 text-center font-medium text-accent-foreground hover:bg-accent-hover"
-              onClick={() => setOpen(false)}
             >
-              Fale comigo
-            </Link>
+              Portfólio <span aria-hidden="true">↗</span>
+            </a>
           </Container>
         </nav>
       )}

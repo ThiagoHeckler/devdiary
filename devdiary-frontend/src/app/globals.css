@@ -1,7 +1,26 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* O tema escuro é o padrão; o claro vale quando <html data-theme="light">. */
+@custom-variant dark (&:where(html:not([data-theme="light"]) *));
+
+/* Escuro: fundo preto com o verde-água como cor de destaque. */
 :root {
+  color-scheme: dark;
+  --background: #0c0a09;
+  --surface: #1c1917;
+  --foreground: #f5f5f4;
+  --muted: #a8a29e;
+  --border: #292524;
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --accent-foreground: #042f2e;
+  --accent-soft: #134e4a;
+}
+
+/* Claro: os mesmos tons de pedra e verde, invertidos. */
+:root[data-theme="light"] {
+  color-scheme: light;
   --background: #fafaf9;
   --surface: #ffffff;
   --foreground: #1c1917;
@@ -11,20 +30,6 @@
   --accent-hover: #115e59;
   --accent-foreground: #ffffff;
   --accent-soft: #ccfbf1;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0c0a09;
-    --surface: #1c1917;
-    --foreground: #f5f5f4;
-    --muted: #a8a29e;
-    --border: #292524;
-    --accent: #2dd4bf;
-    --accent-hover: #5eead4;
-    --accent-foreground: #042f2e;
-    --accent-soft: #134e4a;
-  }
 }
 
 @theme inline {
@@ -44,6 +49,53 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Quadriculado sutil que some nas bordas, usado atrás dos títulos de página. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Brilho suave na cor de destaque. */
+@utility bg-glow {
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 0%,
+    color-mix(in oklab, var(--accent) 22%, transparent),
+    transparent 70%
+  );
+}
+
+/* Entrada suave dos blocos do topo. Use com delay-* para escalonar. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@utility animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
+}
+
+/* Link de texto na cor de destaque. */
+@utility link {
+  font-weight: 500;
+  color: var(--accent);
+  &:hover {
+    color: var(--accent-hover);
+  }
 }
 
 /* Destaque de sintaxe dos blocos de código (classes geradas pelo rehype-highlight).
