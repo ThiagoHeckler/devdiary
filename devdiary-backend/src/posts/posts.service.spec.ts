@@ -1,7 +1,7 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ArrayContains, QueryFailedError } from 'typeorm';
+import { FindOperator, QueryFailedError } from 'typeorm';
 import { Post, PostStatus } from './entities/post.entity';
 import { PostsService } from './posts.service';
 
@@ -65,11 +65,11 @@ describe('PostsService', () => {
 
       await service.findPublished({ page: 1, limit: 10, tag: 'nestjs' });
 
-      expect(repository.findAndCount).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({ tags: ArrayContains(['nestjs']) }),
-        }),
-      );
+      const [[{ where }]] = repository.findAndCount.mock.calls as [
+        [{ where: { tags: FindOperator<string[]> } }],
+      ];
+      expect(where.tags.type).toBe('raw');
+      expect(where.tags.objectLiteralParameters).toEqual({ tag: '"nestjs"' });
     });
   });
 
@@ -137,7 +137,7 @@ describe('PostsService', () => {
 
     it('throws ConflictException when the slug already exists', async () => {
       const error = new QueryFailedError('INSERT', [], new Error('duplicate'));
-      Object.assign(error.driverError, { code: '23505' });
+      Object.assign(error.driverError, { code: 'ER_DUP_ENTRY' });
       repository.save.mockRejectedValue(error);
 
       await expect(service.create(dto)).rejects.toThrow(ConflictException);

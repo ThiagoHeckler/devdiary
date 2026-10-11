@@ -1,22 +1,24 @@
-# Banco para desenvolvimento local.
+# Banco para desenvolvimento local (MySQL, igual à produção na Hostinger).
 # Uso: docker compose up -d
 services:
   db:
-    image: postgres:17-alpine
+    image: mysql:8.4
     restart: unless-stopped
     environment:
-      POSTGRES_USER: devdiary
-      POSTGRES_PASSWORD: devdiary
-      POSTGRES_DB: devdiary
+      MYSQL_ROOT_PASSWORD: devdiary
+      MYSQL_USER: devdiary
+      MYSQL_PASSWORD: devdiary
+      MYSQL_DATABASE: devdiary
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
-      - "127.0.0.1:15435:5432"
+      - "127.0.0.1:13306:3306"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U devdiary -d devdiary"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -udevdiary -pdevdiary --silent"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
 
 volumes:
-  db-data:
+  mysql-data:
