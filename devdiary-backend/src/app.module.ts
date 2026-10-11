@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
+import { buildDataSourceOptions } from './database/typeorm.config';
 
 @Module({
   imports: [
@@ -15,15 +16,9 @@ import { PostsModule } from './posts/posts.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') !== 'production',
-        logging: false,
+        ...buildDataSourceOptions((key) => configService.get<string>(key)),
+        // Aplica migrations pendentes ao subir a API.
+        migrationsRun: true,
       }),
       inject: [ConfigService],
     }),

@@ -28,25 +28,26 @@ export class Post {
   @Column({ length: 300 })
   excerpt: string;
 
-  /** Conteúdo em Markdown. */
-  @Column('text')
+  /** Conteúdo em Markdown (mediumtext: o text do MySQL só guarda 64 KB). */
+  @Column('mediumtext')
   content: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   coverImageUrl: string | null;
 
-  @Column('text', { array: true, default: '{}' })
+  /** Lista de tags guardada como JSON. */
+  @Column('json')
   tags: string[];
 
   @Column({ type: 'enum', enum: PostStatus, default: PostStatus.DRAFT })
   status: PostStatus;
 
-  @Column({ type: 'timestamptz', nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   publishedAt: Date | null;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ type: 'datetime' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn({ type: 'datetime' })
   updatedAt: Date;
 }

@@ -41,7 +41,7 @@ findOne(@Param('slug') slug: string) {
 | --- | --- |
 | Frontend | Next.js |
 | API | NestJS |
-| Banco | PostgreSQL |
+| Banco | MySQL |
 `,
   },
   {

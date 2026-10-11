@@ -5,12 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  ArrayContains,
-  LessThanOrEqual,
-  QueryFailedError,
-  Repository,
-} from 'typeorm';
+import { LessThanOrEqual, QueryFailedError, Raw, Repository } from 'typeorm';
 import { Paginated, paginate } from '../common/pagination';
 import { AdminListPostsQueryDto } from './dto/admin-list-posts-query.dto';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -22,8 +17,8 @@ import { slugify } from './slugify';
 export type PostSummary = Omit<Post, 'content' | 'status' | 'createdAt'>;
 export type AdminPostSummary = Omit<Post, 'content'>;
 
-/** Código do Postgres para violação de índice único. */
-const UNIQUE_VIOLATION = '23505';
+/** Código do MySQL para violação de índice único. */
+const UNIQUE_VIOLATION = 'ER_DUP_ENTRY';
 
 @Injectable()
 export class PostsService {
@@ -57,7 +52,11 @@ export class PostsService {
       },
       where: {
         ...this.publishedWhere(),
-        ...(tag && { tags: ArrayContains([tag]) }),
+        ...(tag && {
+          tags: Raw((column) => `JSON_CONTAINS(${column}, :tag)`, {
+            tag: JSON.stringify(tag),
+          }),
+        }),
       },
       order: { publishedAt: 'DESC' },
       skip: (page - 1) * limit,
