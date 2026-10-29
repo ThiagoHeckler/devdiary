@@ -65,7 +65,7 @@ export default async function Home() {
       <section className="relative isolate overflow-hidden border-b border-border">
         <div aria-hidden="true" className="bg-grid absolute inset-0 -z-10 opacity-70" />
         <div aria-hidden="true" className="bg-glow absolute inset-0 -z-10" />
-        <Container className="grid items-center gap-16 py-20 sm:py-28 lg:grid-cols-[3fr_2fr]">
+        <Container className="grid items-center gap-16 py-20 sm:py-28 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
           <div className="animate-fade-up">
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-3 py-1 font-mono text-xs text-muted">
               <span className="size-1.5 rounded-full bg-accent" />
