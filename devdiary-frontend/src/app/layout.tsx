@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  alternates: {
+    types: { "application/rss+xml": [{ url: "/rss.xml", title: siteConfig.name }] },
+  },
   title: {
     default: `${siteConfig.name} · Diário de desenvolvedor`,
     template: `%s | ${siteConfig.name}`,
